@@ -86,3 +86,69 @@ body {
   color: #c1121f;
   margin-top: 12px;
 }
+
+.message {
+  margin: 16px 0;
+  color: #555;
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.search-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-form button {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.event-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.event-info {
+  padding: 12px;
+}
+
+.event-info h3 {
+  margin: 8px 0;
+  font-size: 18px;
+}
+
+.event-info p {
+  margin: 4px 0;
+  color: #555;
+}
+
+.event-category {
+  background-color: #e63946;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
