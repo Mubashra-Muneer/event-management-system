@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getEvents } from "../api/ticketmaster.js";
+import { getEvents, getEventById } from "../api/ticketmaster.js";
 
 export const fetchEvents = createAsyncThunk(
   "events/fetchEvents",
@@ -9,16 +9,33 @@ export const fetchEvents = createAsyncThunk(
   }
 );
 
+export const fetchEventById = createAsyncThunk(
+  "events/fetchEventById",
+  async (eventId) => {
+    const event = await getEventById(eventId);
+    return event;
+  }
+);
+
 const initialState = {
   items: [],
   status: "idle",
   error: "",
+  selectedEvent: null,
+  detailsStatus: "idle",
+  detailsError: "",
 };
 
 const eventsSlice = createSlice({
   name: "events",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    clearSelectedEvent(state) {
+      state.selectedEvent = null;
+      state.detailsStatus = "idle";
+      state.detailsError = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchEvents.pending, (state) => {
@@ -32,8 +49,23 @@ const eventsSlice = createSlice({
       .addCase(fetchEvents.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(fetchEventById.pending, (state) => {
+        state.detailsStatus = "loading";
+        state.detailsError = "";
+        state.selectedEvent = null;
+      })
+      .addCase(fetchEventById.fulfilled, (state, action) => {
+        state.detailsStatus = "succeeded";
+        state.selectedEvent = action.payload;
+      })
+      .addCase(fetchEventById.rejected, (state, action) => {
+        state.detailsStatus = "failed";
+        state.detailsError = action.error.message;
       });
   },
 });
+
+export const { clearSelectedEvent } = eventsSlice.actions;
 
 export default eventsSlice.reducer;

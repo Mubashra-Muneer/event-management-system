@@ -176,3 +176,48 @@ body {
   border-radius: 4px;
   font-size: 12px;
 }
+
+.details-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #1f2a44;
+  font-weight: bold;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: #1f2a44;
+}
+
+.details-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 24px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details-image {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.details-info h2 {
+  margin-top: 8px;
+}
+
+.details-info p {
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 700px) {
+  .details-layout {
+    grid-template-columns: 1fr;
+  }
+}

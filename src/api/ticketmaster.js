@@ -50,3 +50,17 @@ export async function getEvents(filters) {
 
   return data._embedded.events;
 }
+
+export async function getEventById(eventId) {
+  checkApiKey();
+
+  const url = BASE_URL + "/events/" + eventId + ".json?apikey=" + API_KEY;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Request failed with status " + response.status);
+  }
+
+  const data = await response.json();
+  return data;
+}
