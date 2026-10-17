@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/authSlice.js";
 
 function Login() {
@@ -9,14 +9,29 @@ function Login() {
   const [error, setError] = useState("");
 
   const users = useSelector((state) => state.auth.users);
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  if (currentUser) {
+    return <Navigate to="/events" replace />;
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    if (email.trim() === "" || password === "") {
-      setError("Please enter your email and password.");
+    if (email.trim() === "") {
+      setError("Email is required.");
+      return;
+    }
+
+    if (!email.includes("@") || !email.includes(".")) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (password === "") {
+      setError("Password is required.");
       return;
     }
 
