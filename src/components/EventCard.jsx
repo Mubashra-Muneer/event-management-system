@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function EventCard({ event }) {
   let imageUrl = "";
   if (event.images && event.images.length > 0) {
@@ -39,6 +41,9 @@ function EventCard({ event }) {
           {venueName}
           {cityName !== "" && ", " + cityName}
         </p>
+        <Link className="details-link" to={"/events/" + event.id}>
+          View details
+        </Link>
       </div>
     </div>
   );
