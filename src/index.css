@@ -106,9 +106,33 @@ body {
   border-radius: 4px;
 }
 
-.search-form button {
+.search-form button,
+.search-form select {
   padding: 8px 16px;
   cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chip {
+  padding: 6px 12px;
+  border: 1px solid #1f2a44;
+  border-radius: 16px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.chip-active {
+  background-color: #1f2a44;
+  color: white;
 }
 
 .events-grid {
