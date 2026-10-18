@@ -1,18 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEventById, clearSelectedEvent } from "../redux/eventsSlice.js";
+import {
+  registerForEvent,
+  cancelRegistration,
+} from "../redux/registrationsSlice.js";
 
 function EventDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [feedback, setFeedback] = useState("");
 
   const event = useSelector((state) => state.events.selectedEvent);
   const detailsStatus = useSelector((state) => state.events.detailsStatus);
   const detailsError = useSelector((state) => state.events.detailsError);
+  const currentUser = useSelector((state) => state.auth.currentUser);
+  const registrations = useSelector((state) => state.registrations.items);
 
   useEffect(() => {
     dispatch(fetchEventById(id));
+    setFeedback("");
 
     return () => {
       dispatch(clearSelectedEvent());
@@ -106,6 +114,58 @@ function EventDetails() {
     ticketUrl = event.url;
   }
 
+  let isRegistered = false;
+  if (currentUser) {
+    isRegistered = registrations.some(
+      (item) =>
+        item.userEmail === currentUser.email && item.eventId === event.id
+    );
+  }
+
+  function handleRegister() {
+    if (!currentUser) {
+      setFeedback("Please login to register for this event.");
+      return;
+    }
+
+    const alreadyRegistered = registrations.some(
+      (item) =>
+        item.userEmail === currentUser.email && item.eventId === event.id
+    );
+
+    if (alreadyRegistered) {
+      setFeedback("You are already registered for this event.");
+      return;
+    }
+
+    dispatch(
+      registerForEvent({
+        userEmail: currentUser.email,
+        eventId: event.id,
+        name: event.name,
+        date: date,
+        venue: venueName,
+        city: cityName,
+        image: imageUrl,
+      })
+    );
+    setFeedback("You have successfully registered for this event.");
+  }
+
+  function handleCancel() {
+    if (!currentUser) {
+      return;
+    }
+
+    dispatch(
+      cancelRegistration({
+        userEmail: currentUser.email,
+        eventId: event.id,
+      })
+    );
+    setFeedback("Your registration has been cancelled.");
+  }
+
   return (
     <div className="page">
       <Link to="/events" className="back-link">
@@ -154,6 +214,28 @@ function EventDetails() {
               </a>
             </p>
           )}
+
+          <div className="details-actions">
+            {!currentUser && (
+              <p className="message">
+                Please <Link to="/login">login</Link> to register for this event.
+              </p>
+            )}
+
+            {currentUser && !isRegistered && (
+              <button type="button" onClick={handleRegister}>
+                Register for event
+              </button>
+            )}
+
+            {currentUser && isRegistered && (
+              <button type="button" className="cancel-button" onClick={handleCancel}>
+                Cancel registration
+              </button>
+            )}
+          </div>
+
+          {feedback !== "" && <p className="success">{feedback}</p>}
         </div>
       </div>
     </div>
