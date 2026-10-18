@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { registerUser } from "../redux/authSlice.js";
 
 function Register() {
@@ -10,8 +10,13 @@ function Register() {
   const [error, setError] = useState("");
 
   const users = useSelector((state) => state.auth.users);
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  if (currentUser) {
+    return <Navigate to="/events" replace />;
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
